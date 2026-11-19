@@ -65,7 +65,7 @@ public sealed partial class AndroidPlaybackService : ObservableObject, IDisposab
                 token.ThrowIfCancellationRequested();
                 _currentUrl = localPath;
                 StreamResolved?.Invoke(this, localPath);
-                _history?.RecordPlay(track);
+                _history?.Advance(track, true, TimeSpan.Zero, DateTimeOffset.UtcNow);
                 IsBuffering   = false;
                 IsBusy        = false;
                 StatusMessage = null;
