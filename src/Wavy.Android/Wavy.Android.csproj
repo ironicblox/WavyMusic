@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0-android</TargetFrameworks>
+    <TargetFrameworks>net10.0-android</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <RootNamespace>Wavy.Android</RootNamespace>
     <AssemblyName>Wavy.Android</AssemblyName>
@@ -14,22 +14,22 @@
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>2.1</ApplicationDisplayVersion>
     <AndroidMinSdkVersion>26</AndroidMinSdkVersion>
-    <AndroidTargetSdkVersion>34</AndroidTargetSdkVersion>
+    <AndroidTargetSdkVersion>35</AndroidTargetSdkVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
-    <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
+    <!-- Let the installed MAUI workload pick the right package versions -->
+    <MauiVersion Condition="'$(MauiVersion)' == ''">10.0.70</MauiVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.100" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.100" />
+    <!-- Use workload-driven versions via MauiVersion, not hardcoded -->
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="9.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
