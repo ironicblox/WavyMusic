@@ -29,7 +29,7 @@ public sealed class AndroidSettingsService
 
     public event EventHandler<string>? Changed;
 
-    public AppTheme Theme
+    public WavyAppTheme Theme
     {
         get => _stored.Theme;
         set { if (_stored.Theme == value) return; _stored.Theme = value; Commit(nameof(Theme)); }
@@ -136,7 +136,7 @@ public sealed class AndroidSettingsService
 
     private sealed class Stored
     {
-        public AppTheme Theme { get; set; } = AppTheme.System;
+        public WavyAppTheme Theme { get; set; } = WavyAppTheme.System;
         public bool AmbientBackground { get; set; } = true;
         public bool PrefetchNext { get; set; } = true;
         public double Volume { get; set; } = 1.0;
@@ -149,5 +149,5 @@ public sealed class AndroidSettingsService
     }
 }
 
-// Keep AppTheme enum accessible in the Android project
-public enum AppTheme { System, Light, Dark, Darker }
+// Keep WavyAppTheme enum accessible in the Android project (renamed to avoid clash with Microsoft.Maui.ApplicationModel.AppTheme)
+public enum WavyAppTheme { System, Light, Dark, Darker }

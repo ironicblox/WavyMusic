@@ -23,7 +23,7 @@ public sealed partial class SettingsAndroidViewModel : ObservableObject
     public int ThemeIndex
     {
         get => (int)_settings.Theme;
-        set { if (value < 0 || value == ThemeIndex) return; _settings.Theme = (AppTheme)value; OnPropertyChanged(); }
+        set { if (value < 0 || value == ThemeIndex) return; _settings.Theme = (WavyAppTheme)value; OnPropertyChanged(); }
     }
 
     public bool AudioNormalization

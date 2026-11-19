@@ -32,8 +32,8 @@ public sealed partial class ArtistAndroidViewModel : ObservableObject
             var details = await _catalogue.GetArtistAsync(BrowseId!);
             if (details is null) { Message = "Artist not found."; return; }
             ArtistName   = details.Name ?? string.Empty;
-            ThumbnailUrl = details.ThumbnailUrl;
-            foreach (var t in details.Tracks) Tracks.Add(t);
+            ThumbnailUrl = details.BannerUrl;
+            foreach (var t in details.TopSongs) Tracks.Add(t);
         }
         catch (Exception ex) { Message = ex.Message; }
         finally { IsLoading = false; }

@@ -81,7 +81,7 @@ public sealed partial class AndroidPlaybackService : ObservableObject, IDisposab
 
             _currentUrl = resolved.DashManifest ?? resolved.Url;
             StreamResolved?.Invoke(this, _currentUrl);
-            _history?.RecordPlay(track);
+            _history?.Advance(track, true, TimeSpan.Zero, DateTimeOffset.UtcNow);
             IsBuffering   = false;
             IsBusy        = false;
             StatusMessage = null;

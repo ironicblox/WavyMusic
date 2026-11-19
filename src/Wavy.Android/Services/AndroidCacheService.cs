@@ -29,11 +29,11 @@ public sealed class AndroidCacheService
     {
         try
         {
-            if (!File.Exists(_historyPath)) return Array.Empty<Track>();
-            return JsonSerializer.Deserialize<List<Track>>(File.ReadAllText(_historyPath), Json)
-                   ?? Array.Empty<Track>();
+            if (!File.Exists(_historyPath)) return new List<Track>();
+            return (IReadOnlyList<Track>)(JsonSerializer.Deserialize<List<Track>>(File.ReadAllText(_historyPath), Json)
+                   ?? new List<Track>());
         }
-        catch { return Array.Empty<Track>(); }
+        catch { return new List<Track>(); }
     }
 
     public void RecordPlay(Track track)

@@ -13,7 +13,7 @@ namespace Wavy.Android.Services;
 public sealed class NoOpProcessRunner : IProcessRunner
 {
     public Task<ProcessResult> RunAsync(string exePath, IReadOnlyList<string> args, CancellationToken ct = default)
-        => Task.FromResult(new ProcessResult(false, string.Empty, "yt-dlp subprocess not available on Android.", 1));
+        => Task.FromResult(new ProcessResult(1, string.Empty, "yt-dlp subprocess not available on Android."));
 
     public async IAsyncEnumerable<string> StreamLinesAsync(string exePath, IReadOnlyList<string> args,
         [EnumeratorCancellation] CancellationToken ct = default)
