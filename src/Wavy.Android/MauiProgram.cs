@@ -1,5 +1,3 @@
-using CommunityToolkit.Maui;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
 using Wavy.Android.Services;
@@ -17,7 +15,6 @@ public static class MauiProgram
 
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("SegoeUI.ttf", "SegoeUI");

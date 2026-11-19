@@ -29,7 +29,6 @@
     <!-- Use workload-driven versions via MauiVersion, not hardcoded -->
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
