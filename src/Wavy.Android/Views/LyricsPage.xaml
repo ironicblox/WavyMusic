@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Wavy.Android.Views.LyricsPage"
+             Title="Lyrics"
+             Shell.NavBarIsVisible="True">
+    <Grid RowDefinitions="Auto,*" Padding="16">
+
+        <!-- Provider / status -->
+        <HorizontalStackLayout Grid.Row="0" Spacing="8" Margin="0,0,0,8">
+            <Label Text="{Binding Provider}" Style="{StaticResource AccentLabel}"
+                   IsVisible="{Binding Provider, Converter={StaticResource IsNotNullConverter}}" />
+            <Label Text="(unsynced)" Style="{StaticResource SubtitleLabel}"
+                   IsVisible="{Binding ShowUnsyncedNotice}" />
+        </HorizontalStackLayout>
+
+        <!-- Loading -->
+        <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" VerticalOptions="Center" />
+
+        <!-- Message -->
+        <Label Grid.Row="1" Text="{Binding Message}"
+               IsVisible="{Binding Message, Converter={StaticResource IsNotNullConverter}}"
+               Style="{StaticResource SubtitleLabel}" HorizontalOptions="Center" VerticalOptions="Center" />
+
+        <!-- Lines -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Lines}"
+                        IsVisible="{Binding IsLoading, Converter={StaticResource InvertBoolConverter}}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding Text}" Padding="0,6" FontSize="16"
+                           Opacity="{Binding Opacity}"
+                           FontAttributes="{Binding IsActive, Converter={StaticResource BoolToFontAttrConverter}}"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

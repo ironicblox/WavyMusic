@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Wavy.Android.Views.PlayerPage"
+             Title="Now Playing"
+             Shell.NavBarIsVisible="True">
+
+    <Grid RowDefinitions="*,Auto" Padding="24,16,24,32">
+
+        <!-- Main player content -->
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Artwork -->
+                <Frame CornerRadius="20" Padding="0" WidthRequest="300" HeightRequest="300"
+                       HorizontalOptions="Center" VerticalOptions="Start">
+                    <Image x:Name="ArtworkImage" Source="{Binding CurrentTrack.ThumbnailUrl}"
+                           Aspect="AspectFill" WidthRequest="300" HeightRequest="300" />
+                </Frame>
+
+                <!-- Title / Artist -->
+                <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                    <Label Text="{Binding CurrentTrack.Title}" FontSize="20" FontAttributes="Bold"
+                           HorizontalOptions="Center" LineBreakMode="TailTruncation" MaxLines="2"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="{Binding CurrentTrack.Artist}" Style="{StaticResource SubtitleLabel}"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+
+                <!-- Status -->
+                <Label Text="{Binding StatusMessage}" Style="{StaticResource SubtitleLabel}"
+                       IsVisible="{Binding StatusMessage, Converter={StaticResource IsNotNullConverter}}"
+                       HorizontalOptions="Center" />
+
+                <!-- Seek bar -->
+                <VerticalStackLayout Spacing="4">
+                    <Slider Value="{Binding PositionSeconds, Mode=TwoWay}"
+                            Maximum="{Binding DurationSeconds}"
+                            Minimum="0" />
+                    <Grid ColumnDefinitions="*,*">
+                        <Label Text="{Binding PositionText}" Style="{StaticResource SubtitleLabel}" />
+                        <Label Grid.Column="1" Text="{Binding DurationText}"
+                               Style="{StaticResource SubtitleLabel}" HorizontalOptions="End" />
+                    </Grid>
+                </VerticalStackLayout>
+
+                <!-- Controls -->
+                <Grid ColumnDefinitions="*,*,*,*,*" HorizontalOptions="Center" ColumnSpacing="8">
+                    <Button Grid.Column="0" Text="{Binding ShuffleLabel}" Style="{StaticResource GhostButton}"
+                            Command="{Binding ToggleShuffleCommand}" FontSize="11" Padding="8,6" />
+                    <Button Grid.Column="1" Text="⏮" FontSize="22" Command="{Binding PreviousCommand}"
+                            BackgroundColor="Transparent" TextColor="{StaticResource WavyText}" />
+                    <Button Grid.Column="2" x:Name="PlayPauseBtn"
+                            FontSize="28" CornerRadius="30" WidthRequest="60" HeightRequest="60"
+                            Command="{Binding TogglePlayPauseCommand}" HorizontalOptions="Center" />
+                    <Button Grid.Column="3" Text="⏭" FontSize="22" Command="{Binding NextCommand}"
+                            BackgroundColor="Transparent" TextColor="{StaticResource WavyText}" />
+                    <Button Grid.Column="4" Text="{Binding RepeatLabel}" Style="{StaticResource GhostButton}"
+                            Command="{Binding ToggleRepeatCommand}" FontSize="11" Padding="8,6" />
+                </Grid>
+
+                <!-- Volume -->
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Grid.Column="0" Text="🔉" FontSize="18" VerticalOptions="Center" />
+                    <Slider Grid.Column="1" Value="{Binding Volume, Mode=TwoWay}" Minimum="0" Maximum="1" />
+                </Grid>
+
+                <!-- Lyrics / Queue buttons -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button Grid.Column="0" Text="Lyrics" Style="{StaticResource GhostButton}"
+                            Clicked="OnLyricsClicked" />
+                    <Button Grid.Column="1" Text="Queue" Style="{StaticResource GhostButton}"
+                            Clicked="OnQueueClicked" />
+                </Grid>
+
+                <!-- Buffering indicator -->
+                <ActivityIndicator IsRunning="{Binding IsBuffering}" IsVisible="{Binding IsBuffering}"
+                                   HorizontalOptions="Center" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

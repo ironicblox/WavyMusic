@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Wavy.Android.Views.SettingsPage"
+             Title="Settings">
+    <ScrollView>
+        <VerticalStackLayout Padding="16,16,16,100" Spacing="20">
+
+            <Label Text="SETTINGS" Style="{StaticResource AccentLabel}" />
+
+            <!-- Appearance -->
+            <Frame>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Appearance" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="Theme" Style="{StaticResource SubtitleLabel}" />
+                    <Picker SelectedIndex="{Binding ThemeIndex, Mode=TwoWay}"
+                            TextColor="{StaticResource WavyText}" BackgroundColor="{StaticResource WavyCard}">
+                        <Picker.Items>
+                            <x:String>System</x:String>
+                            <x:String>Light</x:String>
+                            <x:String>Dark</x:String>
+                            <x:String>Darker</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Audio -->
+            <Frame>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Audio" FontAttributes="Bold" FontSize="16" />
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Loudness normalization" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" IsToggled="{Binding AudioNormalization, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Label Text="Quality" Style="{StaticResource SubtitleLabel}" />
+                    <Picker SelectedIndex="{Binding AudioQualityIndex, Mode=TwoWay}"
+                            TextColor="{StaticResource WavyText}" BackgroundColor="{StaticResource WavyCard}">
+                        <Picker.Items>
+                            <x:String>Best</x:String>
+                            <x:String>Balanced (128 kbps)</x:String>
+                            <x:String>Data saver</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Lyrics -->
+            <Frame>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Lyrics" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="Source" Style="{StaticResource SubtitleLabel}" />
+                    <Picker SelectedIndex="{Binding LyricsSourceIndex, Mode=TwoWay}"
+                            TextColor="{StaticResource WavyText}" BackgroundColor="{StaticResource WavyCard}">
+                        <Picker.Items>
+                            <x:String>Auto</x:String>
+                            <x:String>LRCLIB</x:String>
+                            <x:String>Genius</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Cache -->
+            <Frame>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Storage" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="{Binding CacheSummary}" Style="{StaticResource SubtitleLabel}" />
+                    <Button Text="Clear saved audio" Style="{StaticResource GhostButton}"
+                            Clicked="OnClearCacheClicked" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- About -->
+            <Frame>
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="wavy." FontSize="22" FontAttributes="Bold" TextColor="{StaticResource WavyAccent}" />
+                    <Label Text="{Binding Version}" Style="{StaticResource SubtitleLabel}" />
+                    <Label Text="by csgd" Style="{StaticResource SubtitleLabel}" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

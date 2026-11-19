@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Wavy.Android.Views.PlaylistsPage"
+             Title="Library">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="16,8,16,100" RowSpacing="8">
+
+        <!-- Top toolbar -->
+        <HorizontalStackLayout Grid.Row="0" Spacing="8">
+            <Button Text="+ New" Clicked="OnCreateClicked" Padding="12,8" />
+            <Button Text="Import" Style="{StaticResource GhostButton}" Clicked="OnImportLinkClicked" Padding="12,8" />
+            <Button Text="↓ Code" Style="{StaticResource GhostButton}" Clicked="OnImportCodeClicked" Padding="12,8" />
+        </HorizontalStackLayout>
+
+        <!-- Playlist list -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Playlists}" HeightRequest="120"
+                        ItemsLayout="HorizontalList" SelectionMode="Single"
+                        SelectedItem="{Binding Selected, Mode=TwoWay}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="0,0,12,0" WidthRequest="140">
+                        <Frame>
+                            <VerticalStackLayout Spacing="4">
+                                <Image Source="{Binding ThumbnailUrl}" HeightRequest="70" Aspect="AspectFill" />
+                                <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="12" LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding SummaryText}" Style="{StaticResource SubtitleLabel}" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Selected playlist detail -->
+        <Grid Grid.Row="2" RowDefinitions="Auto,Auto,*" RowSpacing="8" IsVisible="{Binding HasSelection}">
+
+            <!-- Playlist actions -->
+            <HorizontalStackLayout Grid.Row="0" Spacing="8">
+                <Button Text="▶ Play"    Command="{Binding PlaySelectedCommand}"   Padding="12,8" />
+                <Button Text="⇄ Shuffle" Command="{Binding ShuffleSelectedCommand}" Style="{StaticResource GhostButton}" Padding="12,8" />
+                <Button Text="↑ Share"   Clicked="OnShareCodeClicked"              Style="{StaticResource GhostButton}" Padding="12,8" />
+                <Button Text="✏"        Clicked="OnRenameClicked"                 Style="{StaticResource GhostButton}" Padding="12,8" />
+                <Button Text="🗑"        Clicked="OnDeleteClicked"                 Style="{StaticResource GhostButton}" Padding="12,8" />
+            </HorizontalStackLayout>
+
+            <!-- Search within playlist -->
+            <SearchBar Grid.Row="1" Text="{Binding SearchQuery, Mode=TwoWay}" Placeholder="Filter songs…" />
+
+            <!-- Track list -->
+            <CollectionView Grid.Row="2" ItemsSource="{Binding VisibleTracks}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="Remove" BackgroundColor="{StaticResource WavyError}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Grid Padding="0,0,0,8">
+                                <Frame>
+                                    <Grid ColumnDefinitions="48,*,Auto" ColumnSpacing="10">
+                                        <Image Source="{Binding ThumbnailUrl}" WidthRequest="48" HeightRequest="48" Aspect="AspectFill" />
+                                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                            <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="13" LineBreakMode="TailTruncation" />
+                                            <Label Text="{Binding Artist}" Style="{StaticResource SubtitleLabel}" />
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="2" Text="{Binding DurationText}" Style="{StaticResource SubtitleLabel}" VerticalOptions="Center" />
+                                    </Grid>
+                                </Frame>
+                            </Grid>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Empty playlist state -->
+            <Label Grid.Row="2" Text="This playlist is empty." IsVisible="{Binding SelectedIsEmpty}"
+                   Style="{StaticResource SubtitleLabel}" HorizontalOptions="Center" Margin="0,40" />
+        </Grid>
+
+        <!-- Mini now-playing bar at bottom -->
+        <Frame Grid.Row="3" Padding="12,8" Margin="0,0,0,0">
+            <Grid ColumnDefinitions="48,*,Auto" ColumnSpacing="10">
+                <Image Source="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext}" WidthRequest="48" HeightRequest="48" Aspect="AspectFill" />
+            </Grid>
+        </Frame>
+
+    </Grid>
+</ContentPage>

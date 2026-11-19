@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Wavy.Android.ViewModels"
+             x:Class="Wavy.Android.Views.SearchPage"
+             Title="Search">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16,8,16,100" RowSpacing="8">
+
+        <!-- Search bar -->
+        <SearchBar Grid.Row="0" x:Name="SearchBar"
+                   Placeholder="Songs, artists, albums…"
+                   SearchCommand="{Binding SearchCommand}"
+                   SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}"
+                   TextChanged="OnTextChanged" />
+
+        <!-- Filter chips -->
+        <HorizontalStackLayout Grid.Row="1" Spacing="8">
+            <Button Text="Songs"    Style="{StaticResource GhostButton}" Clicked="OnFilterSongs"    />
+            <Button Text="Artists"  Style="{StaticResource GhostButton}" Clicked="OnFilterArtists"  />
+            <Button Text="Albums"   Style="{StaticResource GhostButton}" Clicked="OnFilterAlbums"   />
+            <Button Text="Playlists" Style="{StaticResource GhostButton}" Clicked="OnFilterPlaylists" />
+        </HorizontalStackLayout>
+
+        <Grid Grid.Row="2">
+            <!-- Loading -->
+            <ActivityIndicator IsRunning="{Binding IsSearching}" IsVisible="{Binding IsSearching}" VerticalOptions="Start" Margin="0,20" />
+
+            <!-- Message / empty state -->
+            <Label Text="{Binding Message}" IsVisible="{Binding Message, Converter={StaticResource IsNotNullConverter}}"
+                   Style="{StaticResource SubtitleLabel}" HorizontalOptions="Center" Margin="0,40" />
+
+            <!-- Track results -->
+            <CollectionView ItemsSource="{Binding Results}" IsVisible="{Binding ShowTracks}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0,0,0,8">
+                            <Frame>
+                                <Grid ColumnDefinitions="56,*,Auto" ColumnSpacing="10">
+                                    <Image Source="{Binding ThumbnailUrl}" WidthRequest="56" HeightRequest="56" Aspect="AspectFill" />
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                        <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="14" LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding SubtitleText}" Style="{StaticResource SubtitleLabel}" LineBreakMode="TailTruncation" />
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="2" Text="{Binding DurationText}" Style="{StaticResource SubtitleLabel}" VerticalOptions="Center" />
+                                </Grid>
+                            </Frame>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SearchAndroidViewModel}}, Path=PlayCommand}" CommandParameter="{Binding .}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Artist results -->
+            <CollectionView ItemsSource="{Binding Artists}" IsVisible="{Binding ShowArtists}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0,0,0,8">
+                            <Frame>
+                                <Grid ColumnDefinitions="56,*" ColumnSpacing="10">
+                                    <Image Source="{Binding ThumbnailUrl}" WidthRequest="56" HeightRequest="56" Aspect="AspectFill" />
+                                    <Label Grid.Column="1" Text="{Binding Name}" FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+                                </Grid>
+                            </Frame>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SearchAndroidViewModel}}, Path=PlayArtistCommand}" CommandParameter="{Binding .}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Album results -->
+            <CollectionView ItemsSource="{Binding Albums}" IsVisible="{Binding ShowAlbums}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0,0,0,8">
+                            <Frame>
+                                <Grid ColumnDefinitions="56,*" ColumnSpacing="10">
+                                    <Image Source="{Binding ThumbnailUrl}" WidthRequest="56" HeightRequest="56" Aspect="AspectFill" />
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                        <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="14" LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding Artist}" Style="{StaticResource SubtitleLabel}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SearchAndroidViewModel}}, Path=PlayAlbumCommand}" CommandParameter="{Binding .}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Recent (no query) -->
+            <VerticalStackLayout IsVisible="{Binding HasQuery, Converter={StaticResource InvertBoolConverter}}" Spacing="8">
+                <Label Text="RECENT" Style="{StaticResource AccentLabel}" />
+                <CollectionView ItemsSource="{Binding Recent}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="0,0,0,8">
+                                <Frame>
+                                    <Grid ColumnDefinitions="48,*" ColumnSpacing="10">
+                                        <Image Source="{Binding ThumbnailUrl}" WidthRequest="48" HeightRequest="48" Aspect="AspectFill" />
+                                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                            <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="13" LineBreakMode="TailTruncation" />
+                                            <Label Text="{Binding Artist}" Style="{StaticResource SubtitleLabel}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Frame>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SearchAndroidViewModel}}, Path=PlayCommand}" CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

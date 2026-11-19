@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Wavy.Android.Views.ArtistPage"
+             Title="{Binding ArtistName}"
+             Shell.NavBarIsVisible="True">
+    <Grid RowDefinitions="Auto,*" Padding="16">
+        <ActivityIndicator Grid.RowSpan="2" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" VerticalOptions="Center" />
+        <VerticalStackLayout Grid.Row="0" Spacing="8">
+            <Image Source="{Binding ThumbnailUrl}" HeightRequest="200" Aspect="AspectFill" />
+            <Label Text="{Binding ArtistName}" FontSize="22" FontAttributes="Bold" />
+        </VerticalStackLayout>
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Tracks}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="0,0,0,8">
+                        <Frame>
+                            <Grid ColumnDefinitions="48,*" ColumnSpacing="10">
+                                <Image Source="{Binding ThumbnailUrl}" WidthRequest="48" HeightRequest="48" Aspect="AspectFill" />
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                    <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="13" LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding Album}" Style="{StaticResource SubtitleLabel}" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

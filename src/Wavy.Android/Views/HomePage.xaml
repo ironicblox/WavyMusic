@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Wavy.Android.ViewModels"
+             x:Class="Wavy.Android.Views.HomePage"
+             Title="Home">
+
+    <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsLoadingSuggestions}">
+        <ScrollView>
+            <VerticalStackLayout Padding="16,16,16,100" Spacing="24">
+
+                <!-- Greeting -->
+                <Label Text="{Binding Greeting}" FontSize="26" FontAttributes="Bold" />
+
+                <!-- Recently played -->
+                <VerticalStackLayout Spacing="8" IsVisible="{Binding HasRecent}">
+                    <Label Text="RECENTLY PLAYED" Style="{StaticResource AccentLabel}" />
+                    <CollectionView ItemsSource="{Binding Recent}" HeightRequest="80"
+                                    ItemsLayout="HorizontalList">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,0,12,0" WidthRequest="260">
+                                    <Frame>
+                                        <Grid ColumnDefinitions="56,*" ColumnSpacing="10">
+                                            <Image Source="{Binding ThumbnailUrl}" WidthRequest="56" HeightRequest="56"
+                                                   Aspect="AspectFill" />
+                                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                                <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="13" LineBreakMode="TailTruncation" />
+                                                <Label Text="{Binding Artist}" Style="{StaticResource SubtitleLabel}" LineBreakMode="TailTruncation" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Frame>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeAndroidViewModel}}, Path=PlayTrackCommand}" CommandParameter="{Binding .}" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <!-- Playlists -->
+                <VerticalStackLayout Spacing="8" IsVisible="{Binding HasPlaylists}">
+                    <Label Text="YOUR PLAYLISTS" Style="{StaticResource AccentLabel}" />
+                    <CollectionView ItemsSource="{Binding Playlists}" HeightRequest="100"
+                                    ItemsLayout="HorizontalList">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,0,12,0" WidthRequest="150">
+                                    <Frame>
+                                        <VerticalStackLayout Spacing="4">
+                                            <Image Source="{Binding ThumbnailUrl}" HeightRequest="60" Aspect="AspectFill" />
+                                            <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="12" LineBreakMode="TailTruncation" />
+                                            <Label Text="{Binding SummaryText}" Style="{StaticResource SubtitleLabel}" />
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeAndroidViewModel}}, Path=PlayPlaylistCommand}" CommandParameter="{Binding .}" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <!-- Suggestions -->
+                <VerticalStackLayout Spacing="8" IsVisible="{Binding HasSuggestions}">
+                    <Label Text="PICKED FOR YOU" Style="{StaticResource AccentLabel}" />
+                    <Label Text="{Binding RecommendationReason}" Style="{StaticResource SubtitleLabel}" />
+                    <CollectionView ItemsSource="{Binding Suggestions}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,0,0,8">
+                                    <Frame>
+                                        <Grid ColumnDefinitions="56,*,Auto" ColumnSpacing="10">
+                                            <Image Source="{Binding ThumbnailUrl}" WidthRequest="56" HeightRequest="56" Aspect="AspectFill" />
+                                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                                <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="14" LineBreakMode="TailTruncation" />
+                                                <Label Text="{Binding Artist}" Style="{StaticResource SubtitleLabel}" LineBreakMode="TailTruncation" />
+                                            </VerticalStackLayout>
+                                            <Label Grid.Column="2" Text="{Binding DurationText}" Style="{StaticResource SubtitleLabel}" VerticalOptions="Center" />
+                                        </Grid>
+                                    </Frame>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeAndroidViewModel}}, Path=PlayTrackCommand}" CommandParameter="{Binding .}" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <!-- Trending -->
+                <VerticalStackLayout Spacing="8" IsVisible="{Binding HasTrending}">
+                    <Label Text="POPULAR RIGHT NOW" Style="{StaticResource AccentLabel}" />
+                    <CollectionView ItemsSource="{Binding Trending}" HeightRequest="80"
+                                    ItemsLayout="HorizontalList">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,0,12,0" WidthRequest="200">
+                                    <Frame>
+                                        <Grid ColumnDefinitions="48,*" ColumnSpacing="8">
+                                            <Image Source="{Binding ThumbnailUrl}" WidthRequest="48" HeightRequest="48" Aspect="AspectFill" />
+                                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                                <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="12" LineBreakMode="TailTruncation" />
+                                                <Label Text="{Binding Artist}" Style="{StaticResource SubtitleLabel}" LineBreakMode="TailTruncation" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Frame>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeAndroidViewModel}}, Path=PlayTrackCommand}" CommandParameter="{Binding .}" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <!-- Empty state -->
+                <VerticalStackLayout IsVisible="{Binding IsEmpty}" HorizontalOptions="Center" VerticalOptions="Center" Spacing="12" Padding="0,60,0,0">
+                    <Label Text="wavy." FontSize="32" FontAttributes="Bold" TextColor="{StaticResource WavyAccent}" HorizontalOptions="Center" />
+                    <Label Text="Start searching to build your library." Style="{StaticResource SubtitleLabel}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

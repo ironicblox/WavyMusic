@@ -1,0 +1,71 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'src/Wavy.Android/**'
+      - 'src/Wavy.Core/**'
+      - '.github/workflows/android.yml'
+  workflow_dispatch:   # lets you trigger it manually from GitHub's UI
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      # ── 1. Checkout ────────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── 2. .NET 8 + MAUI workload ─────────────────────────────────────────
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install MAUI workload
+        run: dotnet workload install maui-android --source https://api.nuget.org/v3/index.json
+
+      # ── 3. Java 17 (required by Android SDK build tools) ──────────────────
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # ── 4. Android SDK command-line tools ─────────────────────────────────
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      # ── 5. Restore NuGet packages ─────────────────────────────────────────
+      - name: Restore
+        run: dotnet restore src/Wavy.Android/Wavy.Android.csproj
+
+      # ── 6. Build release APK (unsigned) ───────────────────────────────────
+      - name: Build APK
+        run: |
+          dotnet publish src/Wavy.Android/Wavy.Android.csproj \
+            -f net8.0-android \
+            -c Release \
+            -p:AndroidPackageFormat=apk \
+            -p:AndroidKeyStore=false \
+            -o ./artifacts/android
+
+      # ── 7. Upload APK as a GitHub Actions artifact ────────────────────────
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wavy-Android-APK
+          path: ./artifacts/android/*.apk
+          retention-days: 30
+
+      # ── 8. (Optional) Create a GitHub Release on version tags ─────────────
+      - name: Release on tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./artifacts/android/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

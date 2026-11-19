@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Wavy.Android.Views.AlbumPage"
+             Title="{Binding AlbumTitle}"
+             Shell.NavBarIsVisible="True">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16">
+        <ActivityIndicator Grid.RowSpan="3" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" VerticalOptions="Center" />
+        <Image Grid.Row="0" Source="{Binding ThumbnailUrl}" HeightRequest="200" Aspect="AspectFill" />
+        <VerticalStackLayout Grid.Row="1" Spacing="4" Padding="0,8,0,8">
+            <Label Text="{Binding AlbumTitle}" FontSize="20" FontAttributes="Bold" />
+            <Label Text="{Binding ArtistName}" Style="{StaticResource SubtitleLabel}" />
+            <Button Text="▶ Play album" Command="{Binding PlayAlbumCommand}" Padding="12,8" HorizontalOptions="Start" />
+        </VerticalStackLayout>
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Tracks}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="0,0,0,8">
+                        <Frame>
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                                <Label Grid.Column="0" Text="{Binding TrackNumber}" Style="{StaticResource SubtitleLabel}" WidthRequest="28" VerticalOptions="Center" />
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                    <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="13" LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding Artist}" Style="{StaticResource SubtitleLabel}" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="2" Text="{Binding DurationText}" Style="{StaticResource SubtitleLabel}" VerticalOptions="Center" />
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

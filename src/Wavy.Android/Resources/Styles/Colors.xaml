@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Wavy dark palette (matches the Windows app) -->
+    <Color x:Key="WavyBg">#0D0A14</Color>
+    <Color x:Key="WavySurface">#181422</Color>
+    <Color x:Key="WavyCard">#1E1830</Color>
+    <Color x:Key="WavyAccent">#B59AFF</Color>
+    <Color x:Key="WavyAccentMuted">#7B5FCC</Color>
+    <Color x:Key="WavyText">#F4EFFC</Color>
+    <Color x:Key="WavySubtext">#A99DC0</Color>
+    <Color x:Key="WavyDivider">#2A2440</Color>
+    <Color x:Key="WavyError">#FF6B6B</Color>
+
+    <!-- Semantic aliases for MAUI -->
+    <Color x:Key="Primary">#B59AFF</Color>
+    <Color x:Key="PrimaryDark">#7B5FCC</Color>
+    <Color x:Key="Secondary">#A99DC0</Color>
+    <Color x:Key="White">#F4EFFC</Color>
+    <Color x:Key="Black">#0D0A14</Color>
+
+</ResourceDictionary>
