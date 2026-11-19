@@ -1,8 +1,4 @@
-using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Wavy.Core.Abstractions;
-using Wavy.Core.Models;
 
 namespace Wavy.Android.ViewModels;
 

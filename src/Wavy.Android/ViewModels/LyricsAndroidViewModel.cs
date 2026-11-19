@@ -6,11 +6,11 @@ using Wavy.Core.Services;
 
 namespace Wavy.Android.ViewModels;
 
-/// <summary>Wraps a LyricsLine with an IsActive observable for the Android lyrics view.</summary>
+/// <summary>Wraps a LyricsLine with observable IsActive for the lyrics view.</summary>
 public sealed partial class LyricsLineViewModel : ObservableObject
 {
-    public required string Text         { get; init; }
-    public double? StartSeconds         { get; init; }
+    public required string Text     { get; init; }
+    public double? StartSeconds     { get; init; }
 
     [ObservableProperty] private bool _isActive;
 
@@ -18,8 +18,6 @@ public sealed partial class LyricsLineViewModel : ObservableObject
 
     partial void OnIsActiveChanged(bool value) => OnPropertyChanged(nameof(Opacity));
 }
-
-namespace Wavy.Android.ViewModels;
 
 public sealed partial class LyricsAndroidViewModel : ObservableObject
 {
@@ -29,11 +27,11 @@ public sealed partial class LyricsAndroidViewModel : ObservableObject
     private CancellationTokenSource? _cts;
     private Track? _loadedFor;
 
-    [ObservableProperty] private bool _isLoading;
+    [ObservableProperty] private bool    _isLoading;
     [ObservableProperty] private string? _message;
     [ObservableProperty] private string? _provider;
-    [ObservableProperty] private bool _isSynced;
-    [ObservableProperty] private int _activeIndex = -1;
+    [ObservableProperty] private bool    _isSynced;
+    [ObservableProperty] private int     _activeIndex = -1;
 
     public ObservableCollection<LyricsLineViewModel> Lines { get; } = new();
     public bool ShowUnsyncedNotice => Lines.Count > 0 && !IsSynced;
@@ -71,12 +69,18 @@ public sealed partial class LyricsAndroidViewModel : ObservableObject
                 track.Title, track.Artist, _player.DurationSeconds, _settings.LyricsSource, ct, track.Album);
 
             if (ct.IsCancellationRequested || !ReferenceEquals(track, _loadedFor)) return;
+
             if (found is null || found.Lines.Count == 0)
-            { _loadedFor = null; Reset("No lyrics found."); return; }
+            {
+                _loadedFor = null;
+                Reset("No lyrics found.");
+                return;
+            }
 
             Lines.Clear();
             foreach (var line in found.Lines)
                 Lines.Add(new LyricsLineViewModel { Text = line.Text, StartSeconds = line.StartSeconds });
+
             Provider = found.Provider;
             IsSynced = found.IsSynced;
             OnPropertyChanged(nameof(ShowUnsyncedNotice));
@@ -92,6 +96,7 @@ public sealed partial class LyricsAndroidViewModel : ObservableObject
     private void Reset(string? msg)
     {
         Lines.Clear();
+        if (ActiveIndex >= 0 && ActiveIndex < Lines.Count) Lines[ActiveIndex].IsActive = false;
         ActiveIndex = -1;
         Provider    = null;
         IsSynced    = false;
