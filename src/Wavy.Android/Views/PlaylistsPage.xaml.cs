@@ -43,7 +43,7 @@ public partial class PlaylistsPage : ContentPage
         if (string.IsNullOrWhiteSpace(code)) return;
         var err = _vm.ImportFromCode(code);
         if (err is not null) await DisplayAlert("Import failed", err, "OK");
-        else await DisplayAlert("Imported!", $"Playlist "{_vm.Selected?.Name}" imported.", "OK");
+        else await DisplayAlert("Imported!", $"Playlist \"{_vm.Selected?.Name}\" imported.", "OK");
     }
 
     private async void OnRenameClicked(object s, EventArgs e)
@@ -56,7 +56,7 @@ public partial class PlaylistsPage : ContentPage
     private async void OnDeleteClicked(object s, EventArgs e)
     {
         if (_vm.Selected is null) return;
-        var ok = await DisplayAlert("Delete", $"Delete "{_vm.Selected.Name}"?", "Delete", "Cancel");
+        var ok = await DisplayAlert("Delete", $"Delete \"{_vm.Selected.Name}\"?", "Delete", "Cancel");
         if (ok) _vm.DeleteSelectedCommand.Execute(null);
     }
 }

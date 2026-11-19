@@ -97,7 +97,7 @@ public sealed partial class PlaylistsAndroidViewModel : ObservableObject
         catch (OperationCanceledException) { return null; }
 
         if (details is null) return "That link didn't work.";
-        if (details.Tracks.Count == 0) return $""{details.Title}" has no songs.";
+        if (details.Tracks.Count == 0) return $"\"{details.Title}\" has no songs.";
 
         var p = _playlists.Create(UniqueName(details.Title));
         foreach (var t in details.Tracks) _playlists.TryAdd(p, t);
@@ -113,7 +113,7 @@ public sealed partial class PlaylistsAndroidViewModel : ObservableObject
         catch (Exception e) { return $"Spotify import failed: {e.Message}"; }
 
         if (details is null) return "That link didn't work.";
-        if (details.Tracks.Count == 0) return $"Couldn't match any songs from "{details.Title}".";
+        if (details.Tracks.Count == 0) return $"Couldn't match any songs from \"{details.Title}\".";
 
         var p = _playlists.Create(UniqueName(details.Title));
         foreach (var t in details.Tracks) _playlists.TryAdd(p, t);
