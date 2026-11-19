@@ -2,13 +2,17 @@ using System.IO;
 
 namespace Wavy.Android.Services;
 
-/// <summary>Android equivalent of the Windows AppPaths static class.</summary>
+/// <summary>
+/// Android app paths using MAUI's FileSystem API — safe to call at any point,
+/// no Android Context required.
+/// </summary>
 public sealed class AndroidAppPaths
 {
     public AndroidAppPaths()
     {
-        // Android app data lives in the app's private data dir — no special permissions needed
-        var root = global::Android.App.Application.Context.FilesDir!.AbsolutePath;
+        // FileSystem.AppDataDirectory is MAUI's safe, platform-agnostic data dir.
+        // On Android this maps to the app's private internal storage.
+        var root = Microsoft.Maui.Storage.FileSystem.AppDataDirectory;
         DataRoot   = EnsureDir(Path.Combine(root, "wavy"));
         AudioCache = EnsureDir(Path.Combine(DataRoot, "cache", "audio"));
         ArtCache   = EnsureDir(Path.Combine(DataRoot, "cache", "art"));
@@ -18,7 +22,7 @@ public sealed class AndroidAppPaths
     public string AudioCache { get; }
     public string ArtCache   { get; }
 
-    // Android can't run yt-dlp — we have no bundled binary
+    // Android cannot run yt-dlp subprocess
     public string? YtDlpPath  => null;
     public string? FfmpegPath => null;
 
